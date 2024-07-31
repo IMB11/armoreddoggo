@@ -24,6 +24,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import org.dawnoftime.armoreddoggo.Constants;
+import org.dawnoftime.armoreddoggo.item.DogArmorItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -76,5 +77,13 @@ public abstract class MixinWolf extends TamableAnimal implements NeutralMob, Var
                 }
             }
         }
+    }
+
+    /**
+     * In 1.21, mojang decided to make this method hardcoded to the armadillo armor - hence the cancellation.
+     */
+    @Inject(method = "hasArmor", at = @At("HEAD"), cancellable = true)
+    public void hasArmor(CallbackInfoReturnable<Boolean> cir) {
+        if(this.getBodyArmorItem().getItem() instanceof DogArmorItem) cir.setReturnValue(true);
     }
 }
